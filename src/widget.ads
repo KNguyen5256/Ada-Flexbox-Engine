@@ -73,8 +73,7 @@ package Widget is
    -- procedure initialize (This : in out Instance);
    -- procedure adjust (This : in out Instance);
    -- procedure finalize (This : in out Instance);
-   function Is_In_Bound (This : in out Instance; x_Input, y_Input : Natural)
-   return Boolean;
+   function Is_In_Bound (This : in out Instance; x_Input: Natural; y_Input : Natural) return Boolean;
    procedure Event (This : in out Instance; Evt : Event_Kind);
    procedure Draw (This : in out Instance; img : in out graphic.image);
    procedure Who_I_Am (This : in out Instance);

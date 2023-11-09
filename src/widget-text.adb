@@ -21,7 +21,6 @@ package body Widget.Text is
                               self_flex  => self_flex,
                               child_flex => child_flex,
                               bgd        => bgd,
-                              kind => Button_Widget,
                               others     => <>);
         dui.add_to_LOT (This, Parent);
         return This;
@@ -31,6 +30,11 @@ package body Widget.Text is
     begin
         null;
     end Event;
+
+    overriding procedure Who_I_Am (This: in out Instance) is
+    begin
+        Put_Line("I am a Text Widget.");
+    end;
 
     overriding procedure Draw (This : in out Instance; img : in out g.image) is
     begin

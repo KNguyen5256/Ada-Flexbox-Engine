@@ -1,15 +1,15 @@
+with Ada.Finalization; use Ada.Finalization;
+with Ada.Real_Time; use Ada.Real_Time;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Ada.Real_Time; use Ada.Real_Time;
-
-with Ada.Finalization; use Ada.Finalization;
+with font;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with importer;
-with font;
-
-with Widget;
 
 with namespaces; use namespaces;
+
+with Widget;
 
 package body dui is
 
@@ -152,6 +152,7 @@ package body dui is
                     total_portion      : Natural := 0;
                     nbr_max            : Natural := 0;
                 begin
+                    -- FOR LOOP A, EXPANSION FOR LOOP
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if child_row then
                             expand_w := LOT (i).self_flex.expand_w;
@@ -198,9 +199,18 @@ package body dui is
                         end if;
                     end loop;
 
+                    -- FOR LOOP B, Calculate Position FOR LOOP
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        LOT (i).x := cx;
-                        LOT (i).y := cy;
+                        if e.child_flex.dir = right_left then
+                            LOT(i).x := cw - cx - LOT(i).w;
+                            LOT(i).y := cy;
+                        elsif e.child_flex.dir = bottom_top then
+                            LOT(i).y := ch - cy - LOT(i).h;
+                            LOT(i).x := cx;
+                        else
+                            LOT (i).x := cx;
+                            LOT (i).y := cy;
+                        end if;
                         expand_w  := LOT (i).self_flex.expand_w;
                         expand_h  := LOT (i).self_flex.expand_h;
                         if child_row then
@@ -236,7 +246,9 @@ package body dui is
                                 when max =>
                                     LOT (i).h := e.h;
                             end case;
-                            cx := cx + LOT (i).w;
+                            
+                            cx := cx + LOT(i).w;
+
                         elsif child_column then
                             case expand_h.behavior
                             is -- update h in column context
@@ -270,7 +282,10 @@ package body dui is
                                 when max =>
                                     LOT (i).w := e.w;
                             end case;
-                            cy := cy + LOT (i).h;
+
+                            cy := cy + LOT(i).h;
+                            
+                            
                         elsif child_depth then
                             null;
                         end if;
@@ -298,14 +313,14 @@ package body dui is
 
     
 
-    procedure handle_click_event (x_Input, y_Input : Natural) is
+    procedure handle_click_event (x_Input: Natural; y_Input : Natural) is
 
     procedure click_event
        (c : Layout_Object_Tree.Cursor)
     is
     begin
-        if LOT (i).Is_In_Bound (x_Input, y_Input) then
-            LOT (i).Who_I_Am;
+        if Layout_Object_Tree.Element(c).Is_In_Bound (x_Input, y_Input) then
+            Layout_Object_Tree.Element(c).Who_I_Am;
         end if;
     end click_event;
 

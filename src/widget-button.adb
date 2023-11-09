@@ -18,7 +18,6 @@ package body Widget.Button is
                               self_flex     => self_flex,
                               child_flex    => child_flex,
                               bgd           => bgd,
-                              kind => Button_Widget,
                               others        => <>);
         dui.add_to_LOT (This, Parent);
 
@@ -41,6 +40,12 @@ package body Widget.Button is
         Put_Line("==================== --> Button Clicked!! <-- ======================");
     end Event;
 
+    overriding 
+    procedure Who_I_Am (This: in out Instance) is
+    begin
+        Put_Line("I am a button widget.");
+    end;
+    
     overriding 
     procedure Draw (This : in out Instance; img : in out g.image) is
     begin

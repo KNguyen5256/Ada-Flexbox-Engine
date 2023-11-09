@@ -1,5 +1,6 @@
 with dui;
 with namespaces; use namespaces;
+with Ada.Text_IO;
 package body Widget is
 
     function Create (id         : string;
@@ -14,15 +15,16 @@ package body Widget is
                               self_flex  => self_flex,
                               child_flex => child_flex,
                               bgd        => bgd,
-                              kind       => Normal_Widget,
                               others     => <>);
         dui.add_to_LOT (This, Parent);
         return This;
     end;
 
-    function Is_In_Bound (This : in out Instance; x_Input, y_Input : Natural) is
+    function Is_In_Bound (This : in out Instance; x_Input : Natural; y_Input : Natural) return Boolean is
+        returnval : Boolean;
     begin
-        return Boolean;
+        returnval := ((This.x <= x_Input) and ((This.x + This.w) >= x_Input)) and ((This.y <= y_Input) and ((This.y + This.h) >= y_Input));
+        return returnval;
     end;
 
     procedure Event (This : in out Instance; Evt : Event_Kind) is
@@ -38,7 +40,7 @@ package body Widget is
 
     procedure Who_I_Am (This : in out Instance) is
     begin
-    Put_Line("I am a widget");
-    end;
+        Ada.Text_IO.Put_Line("I am a widget");
+    end Who_I_Am;
 
 end Widget;

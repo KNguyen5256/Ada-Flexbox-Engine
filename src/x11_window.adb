@@ -122,7 +122,9 @@ package body x11_window is
 
             while X.Xlib.XPending (display) > 0 loop
                 X.Xlib.XNextEvent (Display, Report'Access);
-                dui.handle_click_event(Report.xbutton.xx, Report.xbutton.y);
+                if(Report.Event_Type = X.ButtonPress) then
+                    dui.handle_click_event(Natural(Report.xbutton.xx), Natural(Report.xbutton.y));
+                end if;
             end loop;
  
             res := X.Xlib.XGetWindowAttributes (Display, Win, Wa'Unchecked_Access);
