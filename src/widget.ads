@@ -36,6 +36,19 @@ package Widget is
       end case;
    end record;
 
+   type justify_t (behavior : buoy_t := space_nothing) is record
+      case behavior is  
+         when space_between =>
+            space_between : Positive;
+         when space_around =>
+            space_around : Positive;
+         when space_even =>
+            space_even : Positive;
+         when others =>
+            null;
+      end case;
+   end record;
+
    type flex_t is record
       dir      : dir_t    := left_right;
       align    : align_t  := top;

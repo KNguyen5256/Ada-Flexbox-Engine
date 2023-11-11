@@ -128,11 +128,11 @@ package body dui is
 
         procedure compute_node (c : Layout_Object_Tree.Cursor) is
             cc : Natural := Natural (Layout_Object_Tree.Child_Count (c));
-            e            : w.Class := Layout_Object_Tree.Element (c).all;
-            cw           : Natural := e.w;
-            ch           : Natural := e.h;
-            cx           : Natural := e.x;
-            cy           : Natural := e.y;
+            e            : w.Class := Layout_Object_Tree.Element (c).all; --parent
+            cw           : Natural := e.w; --current width
+            ch           : Natural := e.h; --current height
+            cx           : Natural := e.x; --current x coord
+            cy           : Natural := e.y; --current y coord
             counter      : Natural := 0;
             child_row    : Boolean :=
                (e.child_flex.dir = left_right or
@@ -143,6 +143,7 @@ package body dui is
             child_depth  : Boolean :=
                (e.child_flex.dir = front_back or
                 e.child_flex.dir = back_front);
+            buoy_w       : buoy_t;
             
             expand_w, expand_h : expand_t;
             width_pixel_left   : Natural := e.w;
@@ -294,11 +295,47 @@ package body dui is
                     end loop;
         end calculate_children_coordinates;
 
+        procedure calculate_buoy is
+        rWidth : Natural := 0;
+        cTotalWidth : Natural := 0;
+        spaceBetween : Natural := 0;
+        begin
+            buoy_w := e.child_flex.buoy;
+            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                cTotalWidth := LOT(i).w + cTotalWidth;
+            end loop;
+            case buoy_w is 
+                when space_between =>
+                    spaceBetween := (cw - cTotalWidth)/(cc + 1);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        --if e.child_flex.dir = right_left then
+                        --   LOT(i).x := cw - cx - LOT(i).w;
+                        --else
+                            if rWidth = 0 then
+--                                LOT(i).x := cx;
+                                rWidth := LOT(i).x + cw;
+                                Put_Line(rWidth'Image);
+                            else
+                                LOT(i).x := cx + spaceBetween + rWidth;
+                                rWidth := LOT(i).x + cw;
+                            end if;
+                        --end if;
+                    end loop;
+                when space_around =>
+                    null;
+                when space_even =>
+                    null;
+                when others =>
+                    null;
+            end case;
+        end calculate_buoy;
+
         begin
             if cc > 0 then
                 begin
                     calculate_portions; -- Procedure call calculated data necessary to calculate (x,y) coordinates of widgets to be drawn.
                     calculate_children_coordinates; --Procedure call traverses children of current widget to calculate their (x,y) coordinates.
+                    calculate_buoy; --test
                 end;
             end if;
         end compute_node;
