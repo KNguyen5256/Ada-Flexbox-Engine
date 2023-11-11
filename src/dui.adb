@@ -143,17 +143,16 @@ package body dui is
             child_depth  : Boolean :=
                (e.child_flex.dir = front_back or
                 e.child_flex.dir = back_front);
+            
+            expand_w, expand_h : expand_t;
+            width_pixel_left   : Natural := e.w;
+            height_pixel_left  : Natural := e.h;
+            total_portion      : Natural := 0;
+            nbr_max            : Natural := 0;
+        
+        procedure calculate_portions is
         begin
-            if cc > 0 then
-                declare
-                    expand_w, expand_h : expand_t;
-                    width_pixel_left   : Natural := e.w;
-                    height_pixel_left  : Natural := e.h;
-                    total_portion      : Natural := 0;
-                    nbr_max            : Natural := 0;
-                begin
-                    -- FOR LOOP A, EXPANSION FOR LOOP
-                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if child_row then
                             expand_w := LOT (i).self_flex.expand_w;
                             case expand_w.behavior is
@@ -198,9 +197,11 @@ package body dui is
                             null;
                         end if;
                     end loop;
+        end calculate_portions;
 
-                    -- FOR LOOP B, Calculate Position FOR LOOP
-                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+        procedure calculate_children_coordinates is
+        begin
+            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if e.child_flex.dir = right_left then
                             LOT(i).x := cw - cx - LOT(i).w;
                             LOT(i).y := cy;
@@ -291,6 +292,13 @@ package body dui is
                         end if;
                         counter := counter + 1;
                     end loop;
+        end calculate_children_coordinates;
+
+        begin
+            if cc > 0 then
+                begin
+                    calculate_portions; -- Procedure call calculated data necessary to calculate (x,y) coordinates of widgets to be drawn.
+                    calculate_children_coordinates; --Procedure call traverses children of current widget to calculate their (x,y) coordinates.
                 end;
             end if;
         end compute_node;

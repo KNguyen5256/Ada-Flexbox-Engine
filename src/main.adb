@@ -47,7 +47,7 @@ procedure Main is
                                       self_flex  => (expand_w => (behavior => max),
                                                      expand_h => (pixel, 50),
                                                      others   => <>),
-                                      child_flex => (dir    => right_left,
+                                      child_flex => (dir    => left_right,
                                                      others => <>),
                                       bgd        => get_color);
     file_button : w.Any_Acc := wb.Create (id         => "file_button",
@@ -98,7 +98,7 @@ procedure Main is
                                       self_flex  => (expand_w => (pixel, 200),
                                                      expand_h => (behavior => max),
                                                      others   => <>),
-                                      child_flex => (dir    => bottom_top,
+                                      child_flex => (dir    => top_bottom,
                                                      others => <>),
                                       bgd        => get_color);
     
