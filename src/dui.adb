@@ -207,6 +207,9 @@ package body dui is
                         elsif e.child_flex.dir = bottom_top then
                             LOT(i).y := ch - cy - LOT(i).h;
                             LOT(i).x := cx;
+                        elsif e.child_flex.dir = top_bottom then
+                            LOT(i).y := cy;
+                            LOT(i).x := cx;
                         else
                             LOT (i).x := cx;
                             LOT (i).y := cy;
