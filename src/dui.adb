@@ -131,8 +131,8 @@ package body dui is
             e            : w.Class := Layout_Object_Tree.Element (c).all; --parent
             cw           : Natural := e.w; --current width
             ch           : Natural := e.h; --current height
-            cx           : Natural := e.x; --current x coord
-            cy           : Natural := e.y; --current y coord
+            cx           : Natural := e.x; --child x coord
+            cy           : Natural := e.y; --child y coord
             counter      : Natural := 0;
             child_row    : Boolean :=
                (e.child_flex.dir = left_right or
@@ -204,7 +204,7 @@ package body dui is
         begin
             for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if e.child_flex.dir = right_left then
-                            LOT(i).x := cw - cx - LOT(i).w;
+                            LOT(i).x := cw - LOT(i).w + e.x;
                             LOT(i).y := cy;
                         elsif e.child_flex.dir = bottom_top then
                             LOT(i).y := ch - cy - LOT(i).h;
@@ -296,34 +296,86 @@ package body dui is
         end calculate_children_coordinates;
 
         procedure calculate_buoy is
-        rWidth : Natural := 0;
-        cTotalWidth : Natural := 0;
-        spaceBetween : Natural := 0;
+        rWidth          : Natural := 0;
+        cTotalWidth     : Natural := 0;
+        spaceBetween    : Natural := 0;
+        spaceAround     : Natural := 0;
+        spaceEven       : Natural := 0;
+        counter         : Natural := 0;
         begin
             buoy_w := e.child_flex.buoy;
-            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                cTotalWidth := LOT(i).w + cTotalWidth;
-            end loop;
             case buoy_w is 
                 when space_between =>
-                    spaceBetween := (cw - cTotalWidth)/(cc + 1);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        --if e.child_flex.dir = right_left then
-                        --   LOT(i).x := cw - cx - LOT(i).w;
-                        --else
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceBetween := (cw - cTotalWidth)/(cc - 1);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
                             if rWidth = 0 then
---                                LOT(i).x := cx;
-                                rWidth := LOT(i).x + cw;
-                                Put_Line(rWidth'Image);
+                                rWidth := LOT(i).x;
                             else
-                                LOT(i).x := cx + spaceBetween + rWidth;
-                                rWidth := LOT(i).x + cw;
+                                LOT(i).x := rWidth - spaceBetween - LOT(i).w;
+                                rWidth := LOT(i).x;
                             end if;
-                        --end if;
+                        else
+                            if rWidth = 0 then
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := spaceBetween + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
                     end loop;
                 when space_around =>
-                    null;
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceAround := (cw - cTotalWidth)/(2 * cc);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x - spaceAround;
+                                rWidth := LOT(i).x;
+                            else
+                                LOT(i).x := rWidth - 2 * spaceAround - LOT(i).w;
+                                rWidth := LOT(i).x;
+                            end if;
+                        else
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceAround;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := 2 * spaceAround + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
+                    end loop;
                 when space_even =>
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceEven := (cw - cTotalWidth)/(cc + 1);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x - spaceEven;
+                                rWidth := LOT(i).x;
+                            else
+                                LOT(i).x := rWidth - spaceEven - LOT(i).w;
+                                rWidth := LOT(i).x;
+                            end if;
+                        else
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceEven;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := spaceEven + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
+                    end loop;
+                when space_nothing =>
                     null;
                 when others =>
                     null;
@@ -335,7 +387,9 @@ package body dui is
                 begin
                     calculate_portions; -- Procedure call calculated data necessary to calculate (x,y) coordinates of widgets to be drawn.
                     calculate_children_coordinates; --Procedure call traverses children of current widget to calculate their (x,y) coordinates.
-                    calculate_buoy; --test
+                    if cc > 1 then
+                        calculate_buoy; --test
+                    end if;
                 end;
             end if;
         end compute_node;
