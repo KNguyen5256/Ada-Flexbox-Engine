@@ -10,6 +10,7 @@ with importer;
 with namespaces; use namespaces;
 
 with Widget;
+with Widget.Button;
 
 package body dui is
 
@@ -426,6 +427,17 @@ package body dui is
     begin
         Layout_Object_Tree.Iterate (LOT, click_event'Access);
     end handle_click_event;
+
+    procedure handle_release_event is
+    procedure release_event(c: Layout_Object_Tree.Cursor) is
+    begin
+        if Layout_Object_Tree.Element(c).Is_Clickable then
+            Widget.Button.Any_Acc(Layout_Object_Tree.Element(c)).release_click;
+        end if;
+    end;
+    begin
+        Layout_Object_Tree.Iterate(LOT, release_event'Access);
+    end handle_release_event;
 
 begin
     main_widget :=
