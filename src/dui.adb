@@ -129,26 +129,26 @@ package body dui is
 
         procedure compute_node (c : Layout_Object_Tree.Cursor) is
             cc : Natural := Natural (Layout_Object_Tree.Child_Count (c));
-            e            : w.Class := Layout_Object_Tree.Element (c).all; --parent
-            cw           : Natural := e.w; --current width
-            ch           : Natural := e.h; --current height
-            cx           : Natural := e.x; --child x coord
-            cy           : Natural := e.y; --child y coord
+            LOT_Parent            : w.Class := Layout_Object_Tree.Element (c).all; --parent
+            LOT_Parent_Width           : Natural := LOT_Parent.w; --current width
+            LOT_Parent_Height           : Natural := LOT_Parent.h; --current height
+            LOT_xCoord           : Natural := LOT_Parent.x; --child x coord
+            LOT_yCoord           : Natural := LOT_Parent.y; --child y coord
             counter      : Natural := 0;
             child_row    : Boolean :=
-               (e.child_flex.dir = left_right or
-                e.child_flex.dir = right_left);
+               (LOT_Parent.child_flex.dir = left_right or
+                LOT_Parent.child_flex.dir = right_left);
             child_column : Boolean :=
-               (e.child_flex.dir = top_bottom or
-                e.child_flex.dir = bottom_top);
+               (LOT_Parent.child_flex.dir = top_bottom or
+                LOT_Parent.child_flex.dir = bottom_top);
             child_depth  : Boolean :=
-               (e.child_flex.dir = front_back or
-                e.child_flex.dir = back_front);
+               (LOT_Parent.child_flex.dir = front_back or
+                LOT_Parent.child_flex.dir = back_front);
             buoy_w       : buoy_t;
             
             expand_w, expand_h : expand_t;
-            width_pixel_left   : Natural := e.w;
-            height_pixel_left  : Natural := e.h;
+            width_pixel_left   : Natural := LOT_Parent.w;
+            height_pixel_left  : Natural := LOT_Parent.h;
             total_portion      : Natural := 0;
             nbr_max            : Natural := 0;
         
@@ -168,7 +168,7 @@ package body dui is
                                     width_pixel_left :=
                                        width_pixel_left -
                                        Natural
-                                          (percent_t (e.w) * expand_w.percent);
+                                          (percent_t (LOT_Parent.w) * expand_w.percent);
                                 when content =>
                                     width_pixel_left :=
                                        width_pixel_left - LOT (i).w;
@@ -188,7 +188,7 @@ package body dui is
                                     height_pixel_left :=
                                        height_pixel_left -
                                        Natural
-                                          (percent_t (e.h) * expand_h.percent);
+                                          (percent_t (LOT_Parent.h) * expand_h.percent);
                                 when content =>
                                     height_pixel_left :=
                                        height_pixel_left - LOT (i).h;
@@ -204,18 +204,18 @@ package body dui is
         procedure calculate_children_coordinates is
         begin
             for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        if e.child_flex.dir = right_left then
-                            LOT(i).x := cw - LOT(i).w + e.x;
-                            LOT(i).y := cy;
-                        elsif e.child_flex.dir = bottom_top then
-                            LOT(i).y := ch - cy - LOT(i).h;
-                            LOT(i).x := cx;
-                        elsif e.child_flex.dir = top_bottom then
-                            LOT(i).y := cy;
-                            LOT(i).x := cx;
+                        if LOT_Parent.child_flex.dir = right_left then
+                            LOT(i).x := LOT_Parent_Width - LOT(i).w + LOT_Parent.x;
+                            LOT(i).y := LOT_yCoord;
+                        elsif LOT_Parent.child_flex.dir = bottom_top then
+                            LOT(i).y := LOT_Parent_Height - LOT_yCoord - LOT(i).h;
+                            LOT(i).x := LOT_xCoord;
+                        elsif LOT_Parent.child_flex.dir = top_bottom then
+                            LOT(i).y := LOT_yCoord;
+                            LOT(i).x := LOT_xCoord;
                         else
-                            LOT (i).x := cx;
-                            LOT (i).y := cy;
+                            LOT (i).x := LOT_xCoord;
+                            LOT (i).y := LOT_yCoord;
                         end if;
                         expand_w  := LOT (i).self_flex.expand_w;
                         expand_h  := LOT (i).self_flex.expand_h;
@@ -224,14 +224,14 @@ package body dui is
                             is -- update w in row context
                                 when portion =>
                                     LOT (i).w :=
-                                       (e.w / total_portion) *
+                                       (LOT_Parent.w / total_portion) *
                                        expand_w.portion;
                                 when pixel =>
                                     LOT (i).w := expand_w.pixel;
                                 when percent =>
                                     LOT (i).w :=
                                        natural
-                                          (percent_t (e.w) * expand_w.percent);
+                                          (percent_t (LOT_Parent.w) * expand_w.percent);
                                 when content =>
                                     null;
                                 when max =>
@@ -246,28 +246,28 @@ package body dui is
                                 when percent =>
                                     LOT (i).h :=
                                        natural
-                                          (percent_t (e.h) * expand_h.percent);
+                                          (percent_t (LOT_Parent.h) * expand_h.percent);
                                 when content =>
                                     null;
                                 when max =>
-                                    LOT (i).h := e.h;
+                                    LOT (i).h := LOT_Parent.h;
                             end case;
                             
-                            cx := cx + LOT(i).w;
+                            LOT_xCoord := LOT_xCoord + LOT(i).w;
 
                         elsif child_column then
                             case expand_h.behavior
                             is -- update h in column context
                                 when portion =>
                                     LOT (i).h :=
-                                       (e.h / total_portion) *
+                                       (LOT_Parent.h / total_portion) *
                                        expand_h.portion;
                                 when pixel =>
                                     LOT (i).h := expand_h.pixel;
                                 when percent =>
                                     LOT (i).h :=
                                        natural
-                                          (percent_t (e.h) * expand_w.percent);
+                                          (percent_t (LOT_Parent.h) * expand_w.percent);
                                 when content =>
                                     null;
                                 when max =>
@@ -282,14 +282,14 @@ package body dui is
                                 when percent =>
                                     LOT (i).w :=
                                        natural
-                                          (percent_t (e.w) * expand_w.percent);
+                                          (percent_t (LOT_Parent.w) * expand_w.percent);
                                 when content =>
                                     null;
                                 when max =>
-                                    LOT (i).w := e.w;
+                                    LOT (i).w := LOT_Parent.w;
                             end case;
 
-                            cy := cy + LOT(i).h;
+                            LOT_yCoord := LOT_yCoord + LOT(i).h;
                             
                             
                         elsif child_depth then
@@ -307,15 +307,15 @@ package body dui is
         spaceEven       : Natural := 0;
         counter         : Natural := 0;
         begin
-            buoy_w := e.child_flex.buoy;
+            buoy_w := LOT_Parent.child_flex.buoy;
             case buoy_w is 
                 when space_between =>
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         cTotalWidth := LOT(i).w + cTotalWidth;
                     end loop;
-                    spaceBetween := (cw - cTotalWidth)/(cc - 1);
+                    spaceBetween := (LOT_Parent_Width - cTotalWidth)/(cc - 1);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        if e.child_flex.dir = right_left then
+                        if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
                                 rWidth := LOT(i).x;
                             else
@@ -335,9 +335,9 @@ package body dui is
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         cTotalWidth := LOT(i).w + cTotalWidth;
                     end loop;
-                    spaceAround := (cw - cTotalWidth)/(2 * cc);
+                    spaceAround := (LOT_Parent_Width - cTotalWidth)/(2 * cc);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        if e.child_flex.dir = right_left then
+                        if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
                                 LOT(i).x := LOT(i).x - spaceAround;
                                 rWidth := LOT(i).x;
@@ -359,9 +359,9 @@ package body dui is
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         cTotalWidth := LOT(i).w + cTotalWidth;
                     end loop;
-                    spaceEven := (cw - cTotalWidth)/(cc + 1);
+                    spaceEven := (LOT_Parent_Width - cTotalWidth)/(cc + 1);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        if e.child_flex.dir = right_left then
+                        if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
                                 LOT(i).x := LOT(i).x - spaceEven;
                                 rWidth := LOT(i).x;
