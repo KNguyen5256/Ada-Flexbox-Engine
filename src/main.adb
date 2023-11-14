@@ -47,7 +47,7 @@ procedure Main is
                                       self_flex  => (expand_w => (behavior => max),
                                                      expand_h => (pixel, 50),
                                                      others   => <>),
-                                      child_flex => (dir    => right_left,
+                                      child_flex => (dir    => left_right,
                                                      others => <>),
                                       bgd        => get_color);
     file_button : w.Any_Acc := wb.Create (id         => "file_button",
@@ -98,7 +98,7 @@ procedure Main is
                                       self_flex  => (expand_w => (pixel, 200),
                                                      expand_h => (behavior => max),
                                                      others   => <>),
-                                      child_flex => (dir    => bottom_top,
+                                      child_flex => (dir    => top_bottom,
                                                      others => <>),
                                       bgd        => get_color);
     
@@ -108,12 +108,31 @@ procedure Main is
                                        magnification => 1,
                                        self_flex     => (expand_h => (behavior => max),
                                                          others   => <>),
+                                       child_flex    => (buoy => space_between, 
+                                                        dir => left_right,
+                                                        others   => <>),
                                        bgd           => g.white);--get_color);
     
     orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
-                                       self_flex    => (expand_w => (behavior => max),
+                                       self_flex    => (expand_w => (pixel, 200),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img2 : w.Any_Acc := wi.Create (id           => "orig_img2",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 400),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img3 : w.Any_Acc := wi.Create (id           => "orig_img3",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 300),
                                                         expand_h => (behavior => max),
                                                         others   => <>),
                                        bgd          => get_color);

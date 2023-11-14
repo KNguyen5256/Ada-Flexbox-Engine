@@ -43,5 +43,6 @@ package dui is
                       window_height : natural);
     
     procedure handle_click_event (x_Input, y_Input : Natural);
+    procedure handle_release_event;
 
 end;

@@ -10,6 +10,7 @@ with importer;
 with namespaces; use namespaces;
 
 with Widget;
+with Widget.Button;
 
 package body dui is
 
@@ -128,11 +129,11 @@ package body dui is
 
         procedure compute_node (c : Layout_Object_Tree.Cursor) is
             cc : Natural := Natural (Layout_Object_Tree.Child_Count (c));
-            e            : w.Class := Layout_Object_Tree.Element (c).all;
-            cw           : Natural := e.w;
-            ch           : Natural := e.h;
-            cx           : Natural := e.x;
-            cy           : Natural := e.y;
+            e            : w.Class := Layout_Object_Tree.Element (c).all; --parent
+            cw           : Natural := e.w; --current width
+            ch           : Natural := e.h; --current height
+            cx           : Natural := e.x; --child x coord
+            cy           : Natural := e.y; --child y coord
             counter      : Natural := 0;
             child_row    : Boolean :=
                (e.child_flex.dir = left_right or
@@ -143,17 +144,17 @@ package body dui is
             child_depth  : Boolean :=
                (e.child_flex.dir = front_back or
                 e.child_flex.dir = back_front);
+            buoy_w       : buoy_t;
+            
+            expand_w, expand_h : expand_t;
+            width_pixel_left   : Natural := e.w;
+            height_pixel_left  : Natural := e.h;
+            total_portion      : Natural := 0;
+            nbr_max            : Natural := 0;
+        
+        procedure calculate_portions is
         begin
-            if cc > 0 then
-                declare
-                    expand_w, expand_h : expand_t;
-                    width_pixel_left   : Natural := e.w;
-                    height_pixel_left  : Natural := e.h;
-                    total_portion      : Natural := 0;
-                    nbr_max            : Natural := 0;
-                begin
-                    -- FOR LOOP A, EXPANSION FOR LOOP
-                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if child_row then
                             expand_w := LOT (i).self_flex.expand_w;
                             case expand_w.behavior is
@@ -198,11 +199,13 @@ package body dui is
                             null;
                         end if;
                     end loop;
+        end calculate_portions;
 
-                    -- FOR LOOP B, Calculate Position FOR LOOP
-                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+        procedure calculate_children_coordinates is
+        begin
+            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if e.child_flex.dir = right_left then
-                            LOT(i).x := cw - cx - LOT(i).w;
+                            LOT(i).x := cw - LOT(i).w + e.x;
                             LOT(i).y := cy;
                         elsif e.child_flex.dir = bottom_top then
                             LOT(i).y := ch - cy - LOT(i).h;
@@ -291,6 +294,103 @@ package body dui is
                         end if;
                         counter := counter + 1;
                     end loop;
+        end calculate_children_coordinates;
+
+        procedure calculate_buoy is
+        rWidth          : Natural := 0;
+        cTotalWidth     : Natural := 0;
+        spaceBetween    : Natural := 0;
+        spaceAround     : Natural := 0;
+        spaceEven       : Natural := 0;
+        counter         : Natural := 0;
+        begin
+            buoy_w := e.child_flex.buoy;
+            case buoy_w is 
+                when space_between =>
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceBetween := (cw - cTotalWidth)/(cc - 1);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            if rWidth = 0 then
+                                rWidth := LOT(i).x;
+                            else
+                                LOT(i).x := rWidth - spaceBetween - LOT(i).w;
+                                rWidth := LOT(i).x;
+                            end if;
+                        else
+                            if rWidth = 0 then
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := spaceBetween + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
+                    end loop;
+                when space_around =>
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceAround := (cw - cTotalWidth)/(2 * cc);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x - spaceAround;
+                                rWidth := LOT(i).x;
+                            else
+                                LOT(i).x := rWidth - 2 * spaceAround - LOT(i).w;
+                                rWidth := LOT(i).x;
+                            end if;
+                        else
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceAround;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := 2 * spaceAround + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
+                    end loop;
+                when space_even =>
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        cTotalWidth := LOT(i).w + cTotalWidth;
+                    end loop;
+                    spaceEven := (cw - cTotalWidth)/(cc + 1);
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x - spaceEven;
+                                rWidth := LOT(i).x;
+                            else
+                                LOT(i).x := rWidth - spaceEven - LOT(i).w;
+                                rWidth := LOT(i).x;
+                            end if;
+                        else
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceEven;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := spaceEven + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            end if;
+                        end if;
+                    end loop;
+                when space_nothing =>
+                    null;
+                when others =>
+                    null;
+            end case;
+        end calculate_buoy;
+
+        begin
+            if cc > 0 then
+                begin
+                    calculate_portions; -- Procedure call calculated data necessary to calculate (x,y) coordinates of widgets to be drawn.
+                    calculate_children_coordinates; --Procedure call traverses children of current widget to calculate their (x,y) coordinates.
+                    if cc > 1 then
+                        calculate_buoy; --test
+                    end if;
                 end;
             end if;
         end compute_node;
@@ -327,6 +427,17 @@ package body dui is
     begin
         Layout_Object_Tree.Iterate (LOT, click_event'Access);
     end handle_click_event;
+
+    procedure handle_release_event is
+    procedure release_event(c: Layout_Object_Tree.Cursor) is
+    begin
+        if Layout_Object_Tree.Element(c).Is_Clickable then
+            Widget.Button.Any_Acc(Layout_Object_Tree.Element(c)).release_click;
+        end if;
+    end;
+    begin
+        Layout_Object_Tree.Iterate(LOT, release_event'Access);
+    end handle_release_event;
 
 begin
     main_widget :=

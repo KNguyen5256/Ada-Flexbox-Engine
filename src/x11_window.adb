@@ -116,7 +116,7 @@ package body x11_window is
         res := X.Xlib.XGetWindowAttributes (Display, Win, Wa'Unchecked_Access);
         img := wrap_alloc_xshm_image (display, wa.visual, ic.int (w), ic.int (h), 24);
 
-        X.Xlib.XSelectInput (Display, Win, ic.Long (ic.Unsigned (X.ButtonPressMask) or X.ButtonReleaseMask));
+        X.Xlib.XSelectInput (Display, Win, ic.Long (ic.Unsigned (X.ButtonPressMask) or (X.ButtonReleaseMask)));
 
         loop
 
@@ -124,6 +124,8 @@ package body x11_window is
                 X.Xlib.XNextEvent (Display, Report'Access);
                 if(Report.Event_Type = X.ButtonPress) then
                     dui.handle_click_event(Natural(Report.xbutton.xx), Natural(Report.xbutton.y));
+                elsif(Report.Event_Type = X.ButtonRelease) then
+                    dui.handle_release_event;
                 end if;
             end loop;
  

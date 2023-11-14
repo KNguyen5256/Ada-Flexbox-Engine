@@ -38,6 +38,11 @@ package Widget.Button is
 
    overriding
    procedure Draw (This : in out Instance; img : in out graphic.image);
+   
+   overriding
+   function Is_Clickable(This: in Instance) return Boolean;
+
+   procedure release_click(This: in out Instance);
 
 private
    
