@@ -71,6 +71,7 @@ procedure Main is
                                                      expand_h => (pixel, 50),
                                                      others   => <>),
                                       bgd        => g.blue_6);
+
     images : w.Any_Acc := w.Create(id         => "images",
                                    parent     => dui.main_widget,
                                    self_flex  => (expand_w => (behavior => max),
@@ -79,7 +80,7 @@ procedure Main is
                                    child_flex => (dir      => left_right,
                                                   others   => <>),
                                    bgd        => get_color);
-           
+    
     process : w.Any_Acc := wt.Create (id         => "process",
                                       parent     => dui.main_widget,
                                       text       => "Console",--"0%",
