@@ -99,7 +99,7 @@ procedure Main is
                                       self_flex  => (expand_w => (pixel, 200),
                                                      expand_h => (behavior => max),
                                                      others   => <>),
-                                      child_flex => (dir    => top_bottom,
+                                      child_flex => (dir    => bottom_top,
                                                      others => <>),
                                       bgd        => get_color);
     
