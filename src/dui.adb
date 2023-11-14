@@ -199,7 +199,7 @@ package body dui is
                         end if;
                     end loop;
 
-                    -- FOR LOOP B, Calculate Position FOR LOOP
+                    -- FOR LOOP B, Calculate Position FOR LOOP please work
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if e.child_flex.dir = right_left then
                             LOT(i).x := cw - cx - LOT(i).w;
