@@ -1,5 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with dui;
+with graphic;
 
 with namespaces; use namespaces;
 
@@ -19,6 +20,7 @@ package body Widget.Button is
                               child_flex    => child_flex,
                               bgd           => bgd,
                               others        => <>);
+        Any_Acc(this).colors(idle) := bgd;
         dui.add_to_LOT (This, Parent);
 
         Any_Acc(this).button_text := wt.Create (id         => id & ".text",
@@ -43,8 +45,32 @@ package body Widget.Button is
     overriding 
     procedure Who_I_Am (This: in out Instance) is
     begin
+        if This.state = idle then
+        This.state := clicking;
+        This.bgd := This.colors(clicking);
+        This.button_text.bgd := This.bgd;
         Put_Line("I am a button widget.");
+        else
+        This.state := idle;
+        This.bgd := This.colors(idle);
+        This.button_text.bgd := This.bgd;
+        end if;
     end;
+
+   overriding
+   function Is_Clickable(This: in Instance) return Boolean is
+   begin
+   return True;
+   end Is_Clickable;
+
+   procedure release_click(This: in out Instance) is
+   begin
+        if This.state = clicking then
+            This.state := idle;
+            This.bgd := This.colors(idle);
+            This.button_text.bgd := This.colors(idle);
+        end if;
+   end release_click;
     
     overriding 
     procedure Draw (This : in out Instance; img : in out g.image) is

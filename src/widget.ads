@@ -77,6 +77,7 @@ package Widget is
    procedure Event (This : in out Instance; Evt : Event_Kind);
    procedure Draw (This : in out Instance; img : in out graphic.image);
    procedure Who_I_Am (This : in out Instance);
+   function Is_Clickable(This: in Instance) return Boolean;
 
 private
 

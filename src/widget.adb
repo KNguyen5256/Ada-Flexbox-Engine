@@ -40,7 +40,11 @@ package body Widget is
 
     procedure Who_I_Am (This : in out Instance) is
     begin
-        Ada.Text_IO.Put_Line("I am a widget");
+        null;--Ada.Text_IO.Put_Line("I am a widget");
     end Who_I_Am;
-
+    
+   function Is_Clickable(This: in Instance) return Boolean is
+   begin
+   return False;
+   end Is_Clickable;
 end Widget;

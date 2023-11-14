@@ -33,7 +33,7 @@ package body Widget.Text is
 
     overriding procedure Who_I_Am (This: in out Instance) is
     begin
-        Put_Line("I am a Text Widget.");
+        null;--Put_Line("I am a Text Widget.");
     end;
 
     overriding procedure Draw (This : in out Instance; img : in out g.image) is
