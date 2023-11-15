@@ -201,18 +201,17 @@ package body dui is
                     end loop;
         end calculate_portions;
 
-        procedure calculate_children_coordinates is
-        begin
-            for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        if LOT_Parent.child_flex.dir = right_left then
-                            LOT(i).x := LOT_Parent_Width - LOT(i).w + LOT_Parent.x;
-                            LOT(i).y := LOT_yCoord;
-                        elsif LOT_Parent.child_flex.dir = bottom_top then
-                            LOT(i).y := LOT_Parent_Height - LOT_yCoord - LOT(i).h;
-                            LOT(i).x := LOT_xCoord;
-                        elsif LOT_Parent.child_flex.dir = top_bottom then
-                            LOT(i).y := LOT_yCoord;
-                            LOT(i).x := LOT_xCoord;
+                    -- FOR LOOP B, Calculate Position FOR LOOP
+                    for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
+                        if e.child_flex.dir = right_left then
+                            LOT(i).x := cw - cx - LOT(i).w;
+                            LOT(i).y := cy;
+                        elsif e.child_flex.dir = bottom_top then
+                            LOT(i).y := ch - cy - LOT(i).h;
+                            LOT(i).x := cx;
+                        elsif e.child_flex.dir = top_bottom then
+                            LOT(i).y := cy;
+                            LOT(i).x := cx;
                         else
                             LOT (i).x := LOT_xCoord;
                             LOT (i).y := LOT_yCoord;
