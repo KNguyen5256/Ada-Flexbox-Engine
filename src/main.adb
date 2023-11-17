@@ -100,6 +100,7 @@ procedure Main is
                                                      expand_h => (behavior => max),
                                                      others   => <>),
                                       child_flex => (dir    => bottom_top,
+                                                     buoy => space_even,
                                                      others => <>),
                                       bgd        => get_color);
     
@@ -110,7 +111,7 @@ procedure Main is
                                        self_flex     => (expand_h => (behavior => max),
                                                          others   => <>),
                                        child_flex    => (buoy => space_between, 
-                                                        dir => left_right,
+                                                        dir => bottom_top,
                                                         others   => <>),
                                        bgd           => g.white);--get_color);
     
@@ -118,7 +119,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 200),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 
@@ -126,7 +127,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 400),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 
@@ -134,7 +135,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 300),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 400),
                                                         others   => <>),
                                        bgd          => get_color);
 
