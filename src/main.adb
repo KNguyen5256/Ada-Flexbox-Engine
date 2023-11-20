@@ -102,58 +102,6 @@ procedure Main is
                                       child_flex => (dir    => bottom_top,
                                                      others => <>),
                                       bgd        => get_color);
-    
-    gui_area : w.Any_Acc := wt.Create (id            => "gui_area",--filt_img : w.Any_Acc := wt.Create (id            => "filt_img",
-                                       parent        => images,
-                                       text          => "GUI Work Area",--"Filtered",
-                                       magnification => 1,
-                                       self_flex     => (expand_h => (behavior => max),
-                                                         others   => <>),
-                                       child_flex    => (buoy => space_between, 
-                                                        dir => left_right,
-                                                        others   => <>),
-                                       bgd           => g.white);--get_color);
-    
-    orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
-                                       parent       => gui_area,
-                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
-                                       self_flex    => (expand_w => (pixel, 200),
-                                                        expand_h => (behavior => max),
-                                                        others   => <>),
-                                       bgd          => get_color);
-
-    orig_img2 : w.Any_Acc := wi.Create (id           => "orig_img2",
-                                       parent       => gui_area,
-                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
-                                       self_flex    => (expand_w => (pixel, 400),
-                                                        expand_h => (behavior => max),
-                                                        others   => <>),
-                                       bgd          => get_color);
-
-    orig_img3 : w.Any_Acc := wi.Create (id           => "orig_img3",
-                                       parent       => gui_area,
-                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
-                                       self_flex    => (expand_w => (pixel, 300),
-                                                        expand_h => (behavior => max),
-                                                        others   => <>),
-                                       bgd          => get_color);
-
-    img_sep  : w.Any_Acc := w.Create (id         => "img_sep",
-                                      parent     => images,
-                                      self_flex  => (expand_w => (pixel, 10),
-                                                     expand_h => (behavior => max),
-                                                     others   => <>),
-                                      bgd        => get_color);
-
-    widget_list : w.Any_Acc := wt.Create (id            => "widget_list",
-                                       parent        => images,
-                                       text          => "Widget List",
-                                       magnification => 1,
-                                       self_flex     => (
-                                                         expand_w => (pixel, 300),
-                                                         expand_h => (behavior => max),
-                                                         others   => <>),
-                                       bgd           => g.light_grey);
     add_contain : w.Any_Acc := wb.Create (id         => "add_contain",--compute : w.Any_Acc := wb.Create (id         => "compute_button",
                                       parent     => tools,
                                       text       => "Add Container",--"Compute",
@@ -175,6 +123,75 @@ procedure Main is
                                                      expand_h => (pixel, 100),
                                                      others   => <>),
                                       bgd        => g.red_3);
+    
+    gui_area : w.Any_Acc := wt.Create (id            => "gui_area",--filt_img : w.Any_Acc := wt.Create (id            => "filt_img",
+                                       parent        => images,
+                                       text          => "GUI Work Area",--"Filtered",
+                                       magnification => 1,
+                                       self_flex     => (expand_h => (behavior => max),
+                                                         others   => <>),
+                                       child_flex    => (buoy => space_around, 
+                                                        dir => right_left,
+                                                        gap_r => (pixel, 30),
+                                                        others   => <>),
+                                       bgd           => g.white);--get_color);
+    
+    orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 100),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img2 : w.Any_Acc := wi.Create (id           => "orig_img2",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 100),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img3 : w.Any_Acc := wi.Create (id           => "orig_img3",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 100),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img4 : w.Any_Acc := wi.Create (id           => "orig_img4",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 100),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    orig_img5 : w.Any_Acc := wi.Create (id           => "orig_img5",
+                                       parent       => gui_area,
+                                       abs_filename => "data/Ada_Lovelace_photo.qoi",
+                                       self_flex    => (expand_w => (pixel, 100),
+                                                        expand_h => (behavior => max),
+                                                        others   => <>),
+                                       bgd          => get_color);
+
+    img_sep  : w.Any_Acc := w.Create (id         => "img_sep",
+                                      parent     => images,
+                                      self_flex  => (expand_w => (pixel, 10),
+                                                     expand_h => (behavior => max),
+                                                     others   => <>),
+                                      bgd        => get_color);
+
+    widget_list : w.Any_Acc := wt.Create (id            => "widget_list",
+                                       parent        => images,
+                                       text          => "Widget List",
+                                       magnification => 1,
+                                       self_flex     => (
+                                                         expand_w => (pixel, 300),
+                                                         expand_h => (behavior => max),
+                                                         others   => <>),
+                                       bgd           => g.light_grey);
     
     render_ui : x11_window.Update_Image_Buffer := dui.render'Access;
     
