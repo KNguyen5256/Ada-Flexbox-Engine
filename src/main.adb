@@ -157,7 +157,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 100),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 
@@ -165,7 +165,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 100),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 
@@ -173,7 +173,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 100),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 

@@ -134,7 +134,6 @@ package body dui is
             LOT_Parent_Height           : Natural := LOT_Parent.h; --current height
             LOT_Offset_X           : Natural := LOT_Parent.x; --child x coord
             LOT_Offset_Y           : Natural := LOT_Parent.y; --child y coord
-            counter      : Natural := 0;
             child_row    : Boolean :=
                (LOT_Parent.child_flex.dir = left_right or
                 LOT_Parent.child_flex.dir = right_left);
@@ -144,7 +143,7 @@ package body dui is
             child_depth  : Boolean :=
                (LOT_Parent.child_flex.dir = front_back or
                 LOT_Parent.child_flex.dir = back_front);
-            buoy_w       : buoy_t;
+            buoy_wh       : buoy_t;
             gap_r, gap_c : gap_t;
             expand_w, expand_h : expand_t;
             width_pixel_left   : Natural := LOT_Parent.w;
