@@ -100,6 +100,7 @@ procedure Main is
                                                      expand_h => (behavior => max),
                                                      others   => <>),
                                       child_flex => (dir    => bottom_top,
+                                                     buoy => space_even,
                                                      others => <>),
                                       bgd        => get_color);
     add_contain : w.Any_Acc := wb.Create (id         => "add_contain",--compute : w.Any_Acc := wb.Create (id         => "compute_button",
@@ -140,7 +141,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 100),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 
@@ -148,7 +149,7 @@ procedure Main is
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 100),
-                                                        expand_h => (behavior => max),
+                                                        expand_h => (pixel, 200),
                                                         others   => <>),
                                        bgd          => get_color);
 

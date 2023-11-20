@@ -151,6 +151,7 @@ package body dui is
             height_pixel_left  : Natural := LOT_Parent.h;
             total_portion      : Natural := 0;
             nbr_max            : Natural := 0;
+            counter            : Natural := 0;
         
         procedure calculate_portions is
         begin
@@ -298,82 +299,154 @@ package body dui is
 
         procedure calculate_buoy is
         rWidth          : Natural := 0;
+        rHeight         : Natural := 0;
         cTotalWidth     : Natural := 0;
-        spaceBetween    : Natural := 0;
-        spaceAround     : Natural := 0;
-        spaceEven       : Natural := 0;
+        cTotalHeight    : Natural := 0;
+        spaceBetweenX   : Natural := 0;
+        spaceBetweenY   : Natural := 0;
+        spaceAroundX    : Natural := 0;
+        spaceAroundY    : Natural := 0;
+        spaceEvenX      : Natural := 0;
+        spaceEvenY      : Natural := 0;
         counter         : Natural := 0;
         begin
-            buoy_w := LOT_Parent.child_flex.buoy;
-            case buoy_w is 
+            buoy_wh := LOT_Parent.child_flex.buoy;
+            case buoy_wh is 
                 when space_between =>
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        cTotalWidth := LOT(i).w + cTotalWidth;
+                        cTotalWidth  := LOT(i).w + cTotalWidth;
+                        cTotalHeight := LOT(i).h + cTotalHeight;
                     end loop;
-                    spaceBetween := (LOT_Parent_Width - cTotalWidth)/(cc - 1);
+                    spaceBetweenX := (LOT_Parent_Width - cTotalWidth)/(cc - 1);
+                    spaceBetweenY := (LOT_Parent_Height - cTotalHeight)/(cc - 1);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
                                 rWidth := LOT(i).x;
                             else
-                                LOT(i).x := rWidth - spaceBetween - LOT(i).w;
+                                LOT(i).x := rWidth - spaceBetweenX - LOT(i).w;
                                 rWidth := LOT(i).x;
                             end if;
-                        else
+                        elsif LOT_Parent.child_flex.dir = left_right then
                             if rWidth = 0 then
                                 rWidth := LOT(i).w + LOT(i).x;
                             else
-                                LOT(i).x := spaceBetween + rWidth;
+                                LOT(i).x := spaceBetweenX + rWidth;
                                 rWidth := LOT(i).w + LOT(i).x;
                             end if;
+                        else
+                            null;
+                        end if;
+                        if LOT_Parent.child_flex.dir = bottom_top then
+                            if rHeight = 0 then
+                                rHeight := LOT(i).y;
+                            else
+                                LOT(i).y := rHeight - spaceBetweenY -LOT(i).h;
+                                rHeight := LOT(i).y;
+                            end if;
+                        elsif LOT_Parent.child_flex.dir = top_bottom then
+                            if rHeight = 0 then
+                                rHeight := LOT(i).h + LOT(i).y;
+                            else
+                                LOT(i).y := spaceBetweenY + rHeight;
+                                rHeight := LOT(i).h + LOT(i).y;
+                            end if;
+                        else
+                            null;
                         end if;
                     end loop;
                 when space_around =>
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        cTotalWidth := LOT(i).w + cTotalWidth;
+                        cTotalWidth  := LOT(i).w + cTotalWidth;
+                        cTotalHeight := LOT(i).h + cTotalHeight;
                     end loop;
-                    spaceAround := (LOT_Parent_Width - cTotalWidth)/(2 * cc);
+                    spaceAroundX := (LOT_Parent_Width - cTotalWidth)/(2 * cc);
+                    spaceAroundY := (LOT_Parent_Height - cTotalHeight)/(2 * cc);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
-                                LOT(i).x := LOT(i).x - spaceAround;
+                                LOT(i).x := LOT(i).x - spaceAroundX;
                                 rWidth := LOT(i).x;
                             else
-                                LOT(i).x := rWidth - 2 * spaceAround - LOT(i).w;
+                                LOT(i).x := rWidth - 2 * spaceAroundX - LOT(i).w;
                                 rWidth := LOT(i).x;
+                            end if;
+                        elsif LOT_Parent.child_flex.dir = left_right then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceAroundX;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := 2 * spaceAroundX + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
                             end if;
                         else
-                            if rWidth = 0 then
-                                LOT(i).x := LOT(i).x + spaceAround;
-                                rWidth := LOT(i).w + LOT(i).x;
+                            null;                           
+                        end if;
+                        if LOT_Parent.child_flex.dir = bottom_top then
+                            if rHeight = 0 then
+                                LOT(i).y := LOT(i).y - spaceAroundY;
+                                rHeight := LOT(i).y;
                             else
-                                LOT(i).x := 2 * spaceAround + rWidth;
-                                rWidth := LOT(i).w + LOT(i).x;
+                                LOT(i).y := rHeight - 2 * spaceAroundY - LOT(i).h;
+                                rHeight := LOT(i).y;
                             end if;
+                        elsif LOT_Parent.child_flex.dir = top_bottom then
+                            if rHeight = 0 then
+                                LOT(i).y := LOT(i).y + spaceAroundY;
+                                rHeight := LOT(i).h + LOT(i).y;
+                            else
+                                LOT(i).y := 2 * spaceAroundY + rHeight;
+                                rHeight := LOT(i).h + LOT(i).y;
+                            end if;
+                        else
+                            null;
                         end if;
                     end loop;
                 when space_even =>
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
-                        cTotalWidth := LOT(i).w + cTotalWidth;
+                        cTotalWidth  := LOT(i).w + cTotalWidth;
+                        cTotalHeight := LOT(i).h + cTotalHeight;
                     end loop;
-                    spaceEven := (LOT_Parent_Width - cTotalWidth)/(cc + 1);
+                    spaceEvenX := (LOT_Parent_Width - cTotalWidth)/(cc + 1);
+                    spaceEvenY := (LOT_Parent_Height - cTotalHeight)/(cc + 1);
                     for i in Layout_Object_Tree.Iterate_Children (LOT, C) loop
                         if LOT_Parent.child_flex.dir = right_left then
                             if rWidth = 0 then
-                                LOT(i).x := LOT(i).x - spaceEven;
+                                LOT(i).x := LOT(i).x - spaceEvenX;
                                 rWidth := LOT(i).x;
                             else
-                                LOT(i).x := rWidth - spaceEven - LOT(i).w;
+                                LOT(i).x := rWidth - spaceEvenX - LOT(i).w;
                                 rWidth := LOT(i).x;
+                            end if;
+                        elsif LOT_Parent.child_flex.dir = left_right then
+                            if rWidth = 0 then
+                                LOT(i).x := LOT(i).x + spaceEvenX;
+                                rWidth := LOT(i).w + LOT(i).x;
+                            else
+                                LOT(i).x := spaceEvenX + rWidth;
+                                rWidth := LOT(i).w + LOT(i).x;
                             end if;
                         else
-                            if rWidth = 0 then
-                                LOT(i).x := LOT(i).x + spaceEven;
-                                rWidth := LOT(i).w + LOT(i).x;
+                            null;
+                        end if;
+                        if LOT_Parent.child_flex.dir = bottom_top then
+                            if rHeight = 0 then
+                                LOT(i).y := LOT(i).y - spaceEvenY;
+                                rHeight := LOT(i).y;
                             else
-                                LOT(i).x := spaceEven + rWidth;
-                                rWidth := LOT(i).w + LOT(i).x;
+                                LOT(i).y := rHeight - spaceEvenY - LOT(i).h;
+                                rHeight := LOT(i).y;
                             end if;
+                        elsif LOT_Parent.child_flex.dir = top_bottom then
+                            if rHeight = 0 then
+                                LOT(i).y := LOT(i).y + spaceEvenY;
+                                rHeight := LOT(i).h + LOT(i).y;
+                            else
+                                LOT(i).y := spaceEvenY + rHeight;
+                                rHeight := LOT(i).h + LOT(i).y;
+                            end if;
+                        else
+                            null;
                         end if;
                     end loop;
                 when space_nothing =>
