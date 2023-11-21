@@ -12,6 +12,8 @@ package body Widget.Text is
                      magnification : natural := 1;
                      self_flex     : flex_t  := default_flex;
                      child_flex    : flex_t  := default_flex;
+                     min_height, min_width : Natural := 0;
+                     max_height, max_width : Natural := Natural'Last;
                      bgd           : graphic.color) return Widget.Any_Acc is
         This : Widget.Any_Acc;
     begin
@@ -20,6 +22,10 @@ package body Widget.Text is
                               text       => +text,
                               self_flex  => self_flex,
                               child_flex => child_flex,
+                              min_height => min_height, 
+                              min_width => min_width, 
+                              max_height => max_height, 
+                              max_width => max_width,
                               bgd        => bgd,
                               others     => <>);
         dui.add_to_LOT (This, Parent);
@@ -31,15 +37,16 @@ package body Widget.Text is
         null;
     end Event;
 
-    overriding procedure Who_I_Am (This: in out Instance) is
+    overriding procedure Click (This: in out Instance) is
     begin
         null;--Put_Line("I am a Text Widget.");
     end;
 
     overriding procedure Draw (This : in out Instance; img : in out g.image) is
     begin
-        Draw (Parent (This), img);
+        --Draw (Parent (This), img);
         --dui.draw_rect (img, this.x+1, this.y+1, this.w, this.h, g.red_1);
+        
         dui.draw_text (img,
                        +this.text,
                        this.magnification,

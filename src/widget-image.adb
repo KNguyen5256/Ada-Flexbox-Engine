@@ -13,6 +13,8 @@ package body Widget.Image is
                      abs_filename  : string;
                      self_flex     : flex_t  := default_flex;
                      child_flex    : flex_t  := default_flex;
+                     min_height, min_width : Natural := 0;
+                     max_height, max_width : Natural := Natural'Last;
                      bgd           : graphic.color) return Widget.Any_Acc is
 
         img  : aliased g.image := g.Load_QOI (abs_filename);
@@ -23,7 +25,10 @@ package body Widget.Image is
         This := new Instance' (af.Controlled with
                               id            => +id,
                               image         => img'Unchecked_Access,
-
+                              min_height => min_height, 
+                              min_width => min_width, 
+                              max_height => max_height, 
+                              max_width => max_width,
                               abs_filename  => +abs_filename,
                               self_flex     => self_flex,
                               child_flex    => child_flex,
@@ -60,7 +65,7 @@ package body Widget.Image is
         --    & " seconds");
     end;
 
-    overriding procedure Who_I_Am (This : in out Instance) is 
+    overriding procedure Click (This : in out Instance) is 
     begin
     Put_Line("I am an image widget");
     end;

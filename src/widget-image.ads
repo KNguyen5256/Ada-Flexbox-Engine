@@ -28,6 +28,8 @@ package Widget.Image is
                      abs_filename  : string;
                      self_flex     : flex_t  := default_flex;
                      child_flex    : flex_t  := default_flex;
+                     min_height, min_width : Natural := 0;
+                     max_height, max_width : Natural := Natural'Last;
                      bgd           : graphic.color) return Widget.Any_Acc;
 
     --overriding procedure initialize (This : in out Instance);
@@ -36,7 +38,7 @@ package Widget.Image is
 
     overriding procedure Event (This : in out Instance; Evt : Event_Kind);
     overriding procedure Draw (This : in out Instance; img : in out graphic.image);
-    overriding procedure Who_I_Am (This : in out Instance);
+    overriding procedure Click (This : in out Instance);
 
     -- overriding procedure Load (This: Instance);
 

@@ -53,6 +53,8 @@ package Widget is
       id         : SU.Unbounded_String;
       x, y       : Natural   := 0;
       w, h       : Natural   := 50;
+      min_height, min_width : Natural := 0;
+      max_height, max_width : Natural := Natural'Last;
       self_flex  : flex_t;
       child_flex : flex_t;
       bgd        : graphic.color := (0.3, 0.3, 0.3, 0.0);
@@ -68,15 +70,19 @@ package Widget is
                     parent     : Widget.Any_Acc;
                     self_flex  : flex_t  := default_flex;
                     child_flex : flex_t  := default_flex;
+                    min_height, min_width : Natural := 0;
+                    max_height, max_width : Natural := Natural'Last;
                     bgd        : graphic.color) return Widget.Any_Acc;
 
    -- procedure initialize (This : in out Instance);
    -- procedure adjust (This : in out Instance);
    -- procedure finalize (This : in out Instance);
    function Is_In_Bound (This : in out Instance; x_Input: Natural; y_Input : Natural) return Boolean;
+   procedure Set_Width(This: in out Instance; calculated_width: Natural);
+   procedure Set_Height(This: in out Instance; calculated_height: Natural);
    procedure Event (This : in out Instance; Evt : Event_Kind);
    procedure Draw (This : in out Instance; img : in out graphic.image);
-   procedure Who_I_Am (This : in out Instance);
+   procedure Click (This : in out Instance);
    function Is_Clickable(This: in Instance) return Boolean;
 
 private

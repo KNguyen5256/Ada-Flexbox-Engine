@@ -41,9 +41,8 @@ procedure Main is
         return c;
     end;
 
-    header  : w.Any_Acc := wt.Create (id         => "header",
+    header  : w.Any_Acc := w.Create (id         => "header",
                                       parent     => dui.main_widget,
-                                      text       => "Menu Bar",--"Filtering Image",
                                       self_flex  => (expand_w => (behavior => max),
                                                      expand_h => (pixel, 50),
                                                      others   => <>),
@@ -103,19 +102,17 @@ procedure Main is
                                                      others => <>),
                                       bgd        => get_color);
     
-    gui_area : w.Any_Acc := wt.Create (id            => "gui_area",--filt_img : w.Any_Acc := wt.Create (id            => "filt_img",
+    gui_area : w.Any_Acc := w.Create (id            => "gui_area",--filt_img : w.Any_Acc := wt.Create (id            => "filt_img",
                                        parent        => images,
-                                       text          => "GUI Work Area",--"Filtered",
-                                       magnification => 1,
                                        self_flex     => (expand_h => (behavior => max),
                                                          others   => <>),
-                                       child_flex    => (buoy => space_between, 
+                                       child_flex    => (buoy => space_around, 
                                                         dir => left_right,
                                                         others   => <>),
                                        bgd           => g.white);--get_color);
     
     orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
-                                       parent       => gui_area,
+                                     parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 200),
                                                         expand_h => (behavior => max),
@@ -153,6 +150,8 @@ procedure Main is
                                                          expand_w => (pixel, 300),
                                                          expand_h => (behavior => max),
                                                          others   => <>),
+                                       child_flex => (dir    => bottom_top,
+                                                        others => <>),
                                        bgd           => g.light_grey);
     add_contain : w.Any_Acc := wb.Create (id         => "add_contain",--compute : w.Any_Acc := wb.Create (id         => "compute_button",
                                       parent     => tools,
@@ -161,20 +160,20 @@ procedure Main is
                                                      expand_h => (pixel, 100),
                                                      others   => <>),
                                       bgd        => g.red_1);
-    add_flex : w.Any_Acc := wb.Create (id         => "add_flex",
-                                      parent     => tools,
-                                      text       => "Add Flex Item",
-                                      self_flex  => (expand_w => (behavior => max),
-                                                     expand_h => (pixel, 100),
-                                                     others   => <>),
-                                      bgd        => g.red_2);
-    add_media : w.Any_Acc := wb.Create (id         => "add_media",
-                                      parent     => tools,
-                                      text       => "Add Media",
-                                      self_flex  => (expand_w => (behavior => max),
-                                                     expand_h => (pixel, 100),
-                                                     others   => <>),
-                                      bgd        => g.red_3);
+    --add_flex : w.Any_Acc := wb.Create (id         => "add_flex",
+    --                                  parent     => tools,
+    --                                  text       => "Add Flex Item",
+    --                                  self_flex  => (expand_w => (behavior => max),
+    --                                                 expand_h => (pixel, 100),
+    --                                                 others   => <>),
+    --                                  bgd        => g.red_2);
+    --add_media : w.Any_Acc := wb.Create (id         => "add_media",
+    --                                  parent     => widget_list,
+    --                                  text       => "Add Media",
+    --                                  self_flex  => (expand_w => (behavior => max),
+    --                                                 expand_h => (pixel, 100),
+    --                                                 others   => <>),
+    --                                  bgd        => g.red_3);
     
     render_ui : x11_window.Update_Image_Buffer := dui.render'Access;
     
