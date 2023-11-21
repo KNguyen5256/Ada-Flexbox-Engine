@@ -36,12 +36,25 @@ package Widget is
       end case;
    end record;
 
+   type gap_t (behavior : behavior_t := max) is record
+      case behavior is
+         when pixel =>
+            pixel : Natural;
+         when percent =>
+            percent : percent_t;
+         when others =>
+            null;
+      end case;
+   end record;
+
    type flex_t is record
       dir      : dir_t    := left_right;
       align    : align_t  := top;
       buoy     : buoy_t   := space_nothing;
       expand_h : expand_t := (behavior => max);
       expand_w : expand_t := (behavior => max);
+      gap_r : gap_t := (behavior => max);
+      gap_c : gap_t := (behavior => max);
    end record;
 
    default_flex : flex_t := (others => <>);
