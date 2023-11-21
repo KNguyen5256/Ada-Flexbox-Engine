@@ -134,11 +134,12 @@ procedure Main is
                                        self_flex     => (expand_h => (behavior => max),
                                                          others   => <>),
                                        child_flex    => (buoy => space_even,
-                                                        dir => bottom_top,
-                                                        gap_r => (pixel, 10),
-                                                        gap_c => (percent, 0.02),
-                                                        others   => <>),
-                                       bgd           => g.white);
+                                                         align => bottom,
+                                                         dir => left_right,
+                                                         gap_r => (pixel, 10),
+                                                         gap_c => (percent, 0.02),
+                                                         others   => <>),
+                                       bgd           =>  g.white);
     
     orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
                                      parent       => gui_area,

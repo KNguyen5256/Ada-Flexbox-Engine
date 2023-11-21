@@ -146,8 +146,9 @@ package body dui is
             child_depth       : Boolean :=
                (LOT_Parent.child_flex.dir = front_back or
                 LOT_Parent.child_flex.dir = back_front);
-            buoy_wh       : buoy_t;
-            gap_r, gap_c : gap_t;
+            buoy_wh            : buoy_t;
+            align_w           : align_t;
+gap_r, gap_c : gap_t;
             expand_w, expand_h : expand_t;
             width_pixel_left   : Natural := LOT_Parent.w;
             height_pixel_left  : Natural := LOT_Parent.h;
@@ -629,11 +630,64 @@ package body dui is
             end loop;
         end calculate_gap;
 
+            procedure calculate_align is
+            begin
+            align_w := LOT_Parent.child_flex.align;
+                case align_w is
+                    when stretch =>
+                        for i in Layout_Object_Tree.Iterate_Children (LOT, C)
+                        loop
+                            case LOT_Parent.child_flex.dir is
+                                when left_right | right_left =>
+                                    LOT (i).h := LOT_Parent_Height;
+
+                                when bottom_top | top_bottom =>
+                                    LOT (i).w := LOT_Parent_Width;
+
+                                when others =>
+                                    null;
+                            end case;
+                        end loop;
+
+                    when center =>
+                        for i in Layout_Object_Tree.Iterate_Children (LOT, C)
+                        loop
+                            case LOT_Parent.child_flex.dir is
+                                when left_right | right_left =>
+                                    LOT (i).y := (Lot_Parent_Height - LOT (i).h) / 2;
+
+                                when bottom_top | top_bottom =>
+                                    LOT (i).x := (Lot_Parent_Width + LOT (i).w) / 2;
+
+                                when others =>
+                                    null;
+                            end case;
+                        end loop;
+
+                    when bottom =>
+                        for i in Layout_Object_Tree.Iterate_Children (LOT, C)
+                        loop
+                            LOT (i).y := LOT_Parent_Height - (LOT_Offset_Y / 2);
+                        end loop;
+
+                    --  when top =>
+                    --      for i in Layout_Object_Tree.Iterate_Children (LOT, C)
+                    --          loop
+                    --              LOT (i).y := LOT_Parent_Height + Lot (i).h;
+                    --          end loop;
+
+                        -- Other alignment types can be added here in the future
+                    when others =>
+                        null; -- Currently not handling other alignment types
+                end case;
+            end calculate_align;
+
         begin
             if cc > 0 then
                 begin
                     calculate_portions; -- Procedure call calculates data necessary to calculate (x,y) coordinates of widgets to be drawn.
                     calculate_children_coordinates; -- Procedure call traverses children of current widget to calculate their (x,y) coordinates.
+                    calculate_align;
                     if cc > 1 then
                         calculate_buoy; -- Procedure call recalculates (x,y) coordinates of child widgets to apply buoyancy format
                         calculate_gap; -- Procedure call recalculates (x,y) coordinates of child widgets to apply gap size

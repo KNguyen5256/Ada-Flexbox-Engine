@@ -17,7 +17,7 @@ package Widget is
    type percent_t is new Float range 0.0 .. 1.0;
 
    type dir_t      is (left_right, right_left, top_bottom, bottom_top, front_back, back_front);
-   type align_t    is (top, right, bottom, left, center);
+   type align_t    is (top, right, bottom, left, center, stretch);
    type buoy_t     is (space_between, space_around, space_even, space_nothing);
    type behavior_t is (content, portion, pixel, percent, max);
 
