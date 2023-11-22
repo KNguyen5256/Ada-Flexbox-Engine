@@ -631,6 +631,8 @@ gap_r, gap_c : gap_t;
         end calculate_gap;
 
             procedure calculate_align is
+            next_x : Natural := LOT_Parent.x; -- variable to calculate the next x-coord of siblings when calculating left alignment
+            next_y : Natural := LOT_Parent.y; -- variable to calculate the next y-coord of siblings when calculating left alignment
             begin
             align_w := LOT_Parent.child_flex.align;
                 case align_w is
@@ -657,7 +659,7 @@ gap_r, gap_c : gap_t;
                                     LOT (i).y := (Lot_Parent_Height - LOT (i).h) / 2;
 
                                 when bottom_top | top_bottom =>
-                                    LOT (i).x := (Lot_Parent_Width + LOT (i).w) / 2;
+                                    LOT (i).x := Lot_Parent_Width + LOT (i).w;
 
                                 when others =>
                                     null;
@@ -676,7 +678,41 @@ gap_r, gap_c : gap_t;
                     --              LOT (i).y := LOT_Parent_Height + Lot (i).h;
                     --          end loop;
 
-                        -- Other alignment types can be added here in the future
+                    when left =>
+                        for i in Layout_Object_Tree.Iterate_Children (LOT, C)
+                        loop
+                            case LOT_Parent.child_flex.dir is
+                                when left_right | right_left =>
+                                    LOT (i).x := next_x;
+                                    next_x := next_x + LOT (i).w;
+
+                                when top_bottom | bottom_top =>
+                                    LOT (i).x := LOT_Parent.x;
+                                    LOT (i).y := next_y;
+                                    next_y := next_y + LOT (i).h;
+
+                                when others =>
+                                    null;
+                            end case;
+                        end loop;
+
+                    when right =>
+                        for i in Layout_Object_Tree.Iterate_Children (LOT, C) 
+                        loop
+                            case LOT_Parent.child_flex.dir is
+                                when left_right | right_left =>
+                                    LOT (i).x := next_x;
+                                    next_x := next_x + LOT (i).w;
+
+                                when top_bottom | bottom_top =>
+                                    LOT (i).x := LOT_Parent.x + LOT_Parent.w - LOT (i).w;
+                                    LOT (i).y := next_y;
+                                    next_y := next_y + LOT (i).h;
+                                
+                                when others =>
+                                    null;
+                            end case;
+                        end loop;
                     when others =>
                         null; -- Currently not handling other alignment types
                 end case;
@@ -687,10 +723,10 @@ gap_r, gap_c : gap_t;
                 begin
                     calculate_portions; -- Procedure call calculates data necessary to calculate (x,y) coordinates of widgets to be drawn.
                     calculate_children_coordinates; -- Procedure call traverses children of current widget to calculate their (x,y) coordinates.
-                    calculate_align;
                     if cc > 1 then
                         calculate_buoy; -- Procedure call recalculates (x,y) coordinates of child widgets to apply buoyancy format
                         calculate_gap; -- Procedure call recalculates (x,y) coordinates of child widgets to apply gap size
+                        calculate_align;
                     end if;
                 end;
             end if;
