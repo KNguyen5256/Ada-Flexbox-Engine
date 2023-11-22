@@ -667,7 +667,7 @@ gap_r, gap_c : gap_t;
                     when bottom =>
                         for i in Layout_Object_Tree.Iterate_Children (LOT, C)
                         loop
-                            LOT (i).y := LOT_Parent_Height - (LOT_Offset_Y / 2);
+                            LOT (i).y := LOT_Parent_Height - LOT_Offset_Y;
                         end loop;
 
                     --  when top =>
