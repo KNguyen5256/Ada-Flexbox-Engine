@@ -267,7 +267,7 @@ gap_r, gap_c : gap_t;
                                 LOT (i).all.Set_Height
                                    (natural
                                        (percent_t (LOT_Parent.h) *
-                                        expand_w.percent));
+                                        expand_h.percent));
                             when content =>
                                 null;
                             when max =>
