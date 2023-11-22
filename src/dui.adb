@@ -30,7 +30,7 @@ package body dui is
             for i in img'Range (1) loop
                 it := x + i;
                 jt := y + j;
-                if it < x + w and jt < y + h then
+                if it <= x + w and jt <= y + h then
                     target (it, jt) := img (i, j);
                 end if;
             end loop;
