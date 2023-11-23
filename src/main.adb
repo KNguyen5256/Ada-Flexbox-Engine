@@ -43,7 +43,6 @@ procedure Main is
 
     header  : w.Any_Acc := w.Create (id         => "header",
                                       parent     => dui.main_widget,
-                                      --text       => "Menu Bar",
                                       self_flex  => (expand_w => (behavior => max),
                                                      expand_h => (pixel, 50),
                                                      others   => <>),
@@ -91,15 +90,13 @@ procedure Main is
                                                      others   => <>),
                                       bgd        => g.black);
     
-    
     tools   : w.Any_Acc := w.Create (id         => "tools", -- runtime error when rectangle is attempted to be drawn past (0,0) in bottom_top
                                       parent     => images,
-                                      --text       => "Tools",
                                       self_flex  => (expand_w => (pixel, 200),
                                                      expand_h => (behavior => max),
                                                      others   => <>),
                                       child_flex => (dir    => right_left,
-                                                     buoy => space_nothing,
+                                                     buoy   => space_nothing,
                                                      others => <>),
                                       bgd        => get_color);
     add_contain : w.Any_Acc := wb.Create (id         => "add_contain",
@@ -129,8 +126,6 @@ procedure Main is
     
     gui_area : w.Any_Acc := w.Create (id            => "gui_area",
                                        parent        => images,
-                                       --text          => "GUI Work Area",
-                                       --magnification => 1,
                                        self_flex     => (expand_h => (behavior => max),
                                                          others   => <>),
                                        child_flex    => (--buoy => space_even,
@@ -140,15 +135,13 @@ procedure Main is
                                                          --gap_c => (percent, 0.02),
                                                          others   => <>),
                                        bgd           =>  g.white);
-    
     orig_img : w.Any_Acc := wi.Create (id           => "orig_img",
-                                     parent       => gui_area,
+                                       parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
                                        self_flex    => (expand_w => (pixel, 200),
                                                         expand_h => (percent, 0.2),
                                                         others   => <>),
                                        bgd          => get_color);
-
     orig_img2 : w.Any_Acc := wi.Create (id           => "orig_img2",
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
@@ -156,7 +149,6 @@ procedure Main is
                                                         expand_h => (percent, 0.2),
                                                         others   => <>),
                                        bgd          => get_color);
-
     orig_img3 : w.Any_Acc := wi.Create (id           => "orig_img3",
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
@@ -164,7 +156,6 @@ procedure Main is
                                                         expand_h => (percent, 0.2),
                                                         others   => <>),
                                        bgd          => get_color);
-
     orig_img4 : w.Any_Acc := wi.Create (id           => "orig_img4",
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
@@ -172,7 +163,6 @@ procedure Main is
                                                         expand_h => (percent, 0.2),
                                                         others   => <>),
                                        bgd          => get_color);
-
     orig_img5 : w.Any_Acc := wi.Create (id           => "orig_img5",
                                        parent       => gui_area,
                                        abs_filename => "data/Ada_Lovelace_photo.qoi",
@@ -192,12 +182,11 @@ procedure Main is
                                        parent        => images,
                                        text          => "Widget List",
                                        magnification => 1,
-                                       self_flex     => (
-                                                         expand_w => (pixel, 300),
+                                       self_flex     => (expand_w => (pixel, 300),
                                                          expand_h => (behavior => max),
                                                          others   => <>),
-                                       child_flex => (dir    => bottom_top,
-                                                        others => <>),
+                                       child_flex    => (dir    => bottom_top,
+                                                         others => <>),
                                        bgd           => g.light_grey);
     
     render_ui : x11_window.Update_Image_Buffer := dui.render'Access;
