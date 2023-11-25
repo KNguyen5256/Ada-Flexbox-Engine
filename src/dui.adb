@@ -145,14 +145,13 @@ package body dui is
                (LOT_Parent.child_flex.dir = front_back or
                 LOT_Parent.child_flex.dir = back_front);
             buoy_wh            : buoy_t;
-            align_w            : align_t;
+            align_wh            : align_t;
             gap_r, gap_c       : gap_t;
             expand_w, expand_h : expand_t;
             width_pixel_left   : Natural := LOT_Parent.w;
             height_pixel_left  : Natural := LOT_Parent.h;
             total_portion      : Natural := 0;
             nbr_max            : Natural := 0;
-            counter            : Natural := 0;
 
             procedure calculate_portions is
             begin
@@ -301,7 +300,6 @@ package body dui is
                     elsif child_depth then
                         null;
                     end if;
-                    counter := counter + 1;
                 end loop;
             end calculate_children_coordinates;
 
@@ -316,7 +314,6 @@ package body dui is
                 spaceAroundY  : Natural := 0;
                 spaceEvenX    : Natural := 0;
                 spaceEvenY    : Natural := 0;
-                counter       : Natural := 0;
             begin
                 buoy_wh := LOT_Parent.child_flex.buoy;
                 case buoy_wh is
@@ -773,8 +770,8 @@ package body dui is
                    LOT_Parent
                       .y; -- variable to calculate the next y-coord of siblings when calculating left alignment
             begin
-                align_w := LOT_Parent.child_flex.align;
-                case align_w is
+                align_wh := LOT_Parent.child_flex.align;
+                case align_wh is
                     when stretch =>
                         for i in Layout_Object_Tree.Iterate_Children (LOT, C)
                         loop
