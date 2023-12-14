@@ -14,6 +14,10 @@ package graphic is
         r, g, b, a : color_val := 0.0;
     end record;
 
+    green_7 : color := (0.1,0.8,0.1,0.0);
+    green_8 : color := (0.2,0.8,0.2,0.0);
+    green_9 : color := (0.3,0.8,0.3,0.0);
+
     blue_4  : color := (0.6, 0.1, 0.1, 0.0);
     blue_5  : color := (0.6, 0.2, 0.2, 0.0);
     blue_6  : color := (0.6, 0.3, 0.3, 0.0);

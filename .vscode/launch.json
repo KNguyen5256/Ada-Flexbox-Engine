@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "Ada: Debugger Launch",
+            "program": "${workspaceFolder}/bin/main",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "preLaunchTask": "ada: Build current project"
+        },
+        {
             "type": "lldb",
             "request": "launch",
             "name": "Debug",

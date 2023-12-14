@@ -8,7 +8,7 @@ package body Widget.Button is
 
     function Create (id            : string;
                      parent        : Widget.Any_Acc;
-                     text          : string;
+                     text          : string := "";
                      self_flex     : flex_t  := default_flex;
                      child_flex    : flex_t  := default_flex;
                      min_height, min_width : Natural := 0;
@@ -28,7 +28,7 @@ package body Widget.Button is
                               others        => <>);
         Any_Acc(this).colors(idle) := bgd;
         dui.add_to_LOT (This, Parent);
-
+        if text /= "" then
         Any_Acc(this).button_text := wt.Create (id         => id & ".text",
                                                 parent     => this,
                                                 text       => text,
@@ -43,6 +43,7 @@ package body Widget.Button is
                                                 max_width => max_width,
                                                 bgd        => bgd);--this variable affects the color of the button
         
+        end if;
         return This;
     end;
 

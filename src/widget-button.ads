@@ -25,7 +25,7 @@ package Widget.Button is
 
    function Create (id            : string;
                     parent        : Widget.Any_Acc;
-                    text          : string;
+                    text          : string := "";
                     self_flex     : flex_t  := default_flex;
                     child_flex    : flex_t  := default_flex;
                     min_height, min_width : Natural := 0;

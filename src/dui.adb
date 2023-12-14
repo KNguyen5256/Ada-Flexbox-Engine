@@ -13,7 +13,7 @@ with Widget;
 with Widget.Button;
 
 package body dui is
-
+    
     procedure add_to_LOT (Widget : Any_Acc; Parent : Any_Acc) is
     begin
         dui.LOT.Append_Child
@@ -47,13 +47,21 @@ package body dui is
         Xe     : constant Integer := x + w - 1;
         Yb     : constant Integer := y;
         Ye     : constant Integer := y + h - 1;
+        Wx : Integer := Layout_Object_Tree.Element(LOT_Root).w;
+        Wy : Integer := Layout_Object_Tree.Element(LOT_Root).h;
         ic, jc : Integer;
-    begin
+      begin
+    --      Put_Line("Xb" & Natural'Image(Xb));
+    --      Put_Line("Xe" & Natural'Image(Xe));
+    --      Put_Line("Yb" & Natural'Image(Yb));
+    --      Put_Line("Ye" & Natural'Image(Ye));
         for I in Xb .. Xe loop
             for J in Yb .. Ye loop
                 ic            := I;
                 jc            := J;
-                target (I, J) := c;
+                if((I < Wx and J < Wy) and ((I > 0) and (J > 0))) then
+                    target (I, J) := c;
+                end if;
             end loop;
         end loop;
     exception
@@ -118,8 +126,24 @@ package body dui is
         window_height :        Natural)
     is
 
+        procedure debug_dui(c: Layout_Object_Tree.Cursor) is
+            id: Unbounded_String := Layout_Object_Tree.Element(c).id;
+            x: Natural := Layout_Object_Tree.Element(c).x;
+            y: Natural := Layout_Object_Tree.Element(c).y;
+            w: Natural := Layout_Object_Tree.Element(c).w;
+            h: Natural := Layout_Object_Tree.Element(c).h;
+        begin
+            Put_Line("Widget id: " & To_String(id));
+            Put_Line("x: " & Natural'Image(x));
+            Put_Line("y: " & Natural'Image(y));
+            Put_Line("width: " & Natural'Image(w));
+            Put_Line("height: " & Natural'Image(h));
+            Put_Line("");
+        end debug_dui;
+
         procedure render_node (c : Layout_Object_Tree.Cursor) is
         begin
+            debug_dui(c);
             Layout_Object_Tree.Element (c).Draw (target);
         end render_node;
 
@@ -741,6 +765,7 @@ gap_r, gap_c : gap_t;
         LOT (Layout_Object_Tree.First_Child (LOT.Root)).h := window_height;
         Layout_Object_Tree.Iterate (LOT, compute_node'Access);
         Layout_Object_Tree.Iterate (LOT, render_node'Access);
+        Layout_Object_Tree.Iterate(LOT, debug_dui'Access);
         --Layout_Object_Tree.Iterate (LOT, test'access);
         Elapsed_Time := Clock - Start_Time;
         -- Put_Line ("Elapsed time (whole dui): "
