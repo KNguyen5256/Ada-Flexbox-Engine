@@ -7,7 +7,7 @@
         {
             "type": "cppdbg",
             "request": "launch",
-            "name": "Ada: Debugger Launch",
+            "name": "GPRBuild & Run",
             "program": "${workspaceFolder}/bin/main",
             "args": [],
             "cwd": "${workspaceFolder}",
@@ -17,7 +17,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
+            "name": "Old Run Config",
             "program": "${workspaceFolder}/bin/main",
             "args": [],
             "cwd": "${workspaceFolder}"

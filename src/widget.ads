@@ -18,7 +18,7 @@ package Widget is
 
    type dir_t      is (left_right, right_left, top_bottom, bottom_top, front_back, back_front);
    type align_t    is (top, right, bottom, left, center, stretch);
-   type buoy_t     is (space_between, space_around, space_even, space_nothing);
+   type buoy_t     is (space_between, space_around, space_evenly, space_nothing);
    type behavior_t is (content, portion, pixel, percent, max);
 
    type expand_t (behavior : behavior_t := max) is record
